@@ -46,7 +46,7 @@ public class Board extends JPanel implements ActionListener {
     public Board() {
 
         addKeyListener(new TAdapter());
-        setBackground(Color.white);
+        setBackground(Color.black);
         setFocusable(true);
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
@@ -59,10 +59,10 @@ public class Board extends JPanel implements ActionListener {
         ImageIcon iid = new ImageIcon("Snakey.png");
         ball = iid.getImage();
 
-        ImageIcon iia = new ImageIcon("apple.png");
+        ImageIcon iia = new ImageIcon("Snakey.png");
         apple = iia.getImage();
 
-        ImageIcon iih = new ImageIcon("head.png");
+        ImageIcon iih = new ImageIcon("Snakey.png");
         head = iih.getImage();
     }
 
