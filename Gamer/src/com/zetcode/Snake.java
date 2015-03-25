@@ -13,14 +13,14 @@ public class Snake extends JFrame {
         setResizable(false);
         pack();
         
-        setTitle("Snake");
+        setTitle("CIE 123 | MySnakey");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
 
     public static void main(String[] args) {
-    	System.out.println("current working directory is: " + System.getProperty("user.dir")); 
+//    	System.out.println("current working directory is: " + System.getProperty("user.dir")); 
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {                
