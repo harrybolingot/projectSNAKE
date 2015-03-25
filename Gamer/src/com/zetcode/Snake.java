@@ -20,7 +20,7 @@ public class Snake extends JFrame {
     
 
     public static void main(String[] args) {
-        
+    	System.out.println("current working directory is: " + System.getProperty("user.dir")); 
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {                
