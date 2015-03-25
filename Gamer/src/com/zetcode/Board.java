@@ -104,6 +104,10 @@ public class Board extends JPanel implements ActionListener {
             }
 
             Toolkit.getDefaultToolkit().sync();
+            
+          //Adding display of gameScore while inGame
+            displayInGameScore(g);
+            
 
         } else {
 
@@ -111,16 +115,24 @@ public class Board extends JPanel implements ActionListener {
         }        
     }
 
-//    private void gameScore
+    private void displayInGameScore(Graphics g){
+    	String inGameScore = String.valueOf(gameScore);
+        Font big = new Font("Helvetica", Font.BOLD, 20);
+
+        g.setColor(Color.white);
+        g.setFont(big);
+        g.drawString(inGameScore, 280, 20);
+    }
     
     private void gameOver(Graphics g) {
         
         String msg = "Game Over";
         Font small = new Font("Helvetica", Font.BOLD, 14);
+        Font big = new Font("Helvetica", Font.BOLD, 20);
         FontMetrics metr = getFontMetrics(small);
 
-        g.setColor(Color.white);
-        g.setFont(small);
+        g.setColor(Color.red);
+        g.setFont(big);
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
         
         //Adding display gameScore upon gameOver
