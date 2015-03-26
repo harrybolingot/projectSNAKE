@@ -48,7 +48,6 @@ public class Board extends JPanel implements ActionListener {
     private int keyDownCount;
     
     //Adding random number for faking
-    Random rand = new Random();
     private int fakeFactor;
     
     private int DOT_SIZE = 10;
@@ -76,27 +75,30 @@ public class Board extends JPanel implements ActionListener {
         
 		addKeyListener(new KeyListener(){
     	
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-			if(e.getKeyChar() == 'r'){
-				gameRestart();
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+	
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyChar() == 'r'){
+					gameRestart();
+				}
+				
+				if(e.getKeyChar() == 'h'){
+				}
+			}
+	
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
     	
-    });
+		});
     }
 
     private void loadImages() {
@@ -158,14 +160,42 @@ public class Board extends JPanel implements ActionListener {
 
             Toolkit.getDefaultToolkit().sync();
             
-          //Adding display of gameScore while inGame
+            //Adding display of gameScore while inGame
             displayInGameScore(g);
+            
+            
             
 
         } else {
 
             gameOver(g);
         }
+        
+      //Adding showHelp
+        addKeyListener(new KeyListener(){
+        	
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyChar() == 'h'){
+					//inGame = false;
+					showHelp(g);
+				}
+			}
+	
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+    	
+		});
     }
 
     private void displayInGameScore(Graphics g){
@@ -196,7 +226,51 @@ public class Board extends JPanel implements ActionListener {
         g.drawString(msgScore, (B_WIDTH - metr.stringWidth(msgScore)) / 2, B_HEIGHT / 2+30);
         
         
+      //Adding showHelp
+        addKeyListener(new KeyListener(){
+        	
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyChar() == 'h'){
+					//inGame = false;
+					showHelp(g);
+				}
+			}
+	
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+    	
+		});
+    }
+    
+    //Adding showHelp
+    private void showHelp(Graphics g) {
         
+        String msg = "Instructions:";
+        Font small = new Font("Helvetica", Font.BOLD, 14);
+        Font big = new Font("Helvetica", Font.BOLD, 20);
+        FontMetrics metr = getFontMetrics(small);
+
+        g.setColor(Color.red);
+        g.setFont(big);
+        g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+        
+        //Adding display gameScore upon gameOver
+        String msgInstructions = "Move snake using arrow keys.\n Beware of poisoned apples!";
+
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(msgInstructions, (B_WIDTH - metr.stringWidth(msgInstructions)) / 2, B_HEIGHT / 2+30);
         
     }
     
@@ -228,32 +302,7 @@ public class Board extends JPanel implements ActionListener {
         
         gameScore = dots - 3;
     }
-/*
-    private void move() {
 
-        for (int z = dots; z > 0; z--) {
-            x[z] = x[(z - 1)];
-            y[z] = y[(z - 1)];
-        }
-
-        if (leftDirection) {
-            x[0] -= DOT_SIZE;
-        }
-
-        if (rightDirection) {
-            x[0] += DOT_SIZE;
-        }
-
-        if (upDirection) {
-            y[0] -= DOT_SIZE;
-        }
-
-        if (downDirection) {
-            y[0] += DOT_SIZE;
-        }
-        
-    }
-    */
     //Adding moveAccelerate
     private void moveAccelerate(){
     	for (int z = dots; z > 0; z--) {
@@ -279,17 +328,6 @@ public class Board extends JPanel implements ActionListener {
         
         resetKeyCount();
     }
-    
-    //Adding restart
-//    private void gameRestart(){
-//    	@Override 
-//        public void keyPressed(KeyEvent e)
-//        {
-//            if(e.getKeyChar() == 'r'){
-//            	inGame = true;
-//            }
-//        }
-//    }
 
     private void checkCollision() {
 
