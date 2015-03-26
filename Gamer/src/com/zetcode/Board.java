@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final int B_WIDTH = 300;
     private final int B_HEIGHT = 300;
-    private final int DOT_SIZE = 10;
+//    private final int DOT_SIZE = 10;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 29;
     private final int DELAY = 140;
@@ -31,7 +32,17 @@ public class Board extends JPanel implements ActionListener {
     private int dots;
     private int apple_x;
     private int apple_y;
+    
+    //Adding gameScore
     private int gameScore;
+    
+    //Adding keyPressed counters
+    private int keyRightCount;
+    private int keyLeftCount;
+    private int keyUpCount;
+    private int keyDownCount;
+    
+    private int DOT_SIZE = 10;
 
     private boolean leftDirection = false;
     private boolean rightDirection = true;
@@ -53,6 +64,30 @@ public class Board extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         loadImages();
         initGame();
+        
+		addKeyListener(new KeyListener(){
+    	
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getKeyChar() == 'r'){
+				gameRestart();
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    });
     }
 
     private void loadImages() {
@@ -112,7 +147,7 @@ public class Board extends JPanel implements ActionListener {
         } else {
 
             gameOver(g);
-        }        
+        }
     }
 
     private void displayInGameScore(Graphics g){
@@ -141,30 +176,51 @@ public class Board extends JPanel implements ActionListener {
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msgScore, (B_WIDTH - metr.stringWidth(msgScore)) / 2, B_HEIGHT / 2+30);
+        
+        
+        
+        
+    }
+    
+    //gameRestart
+    private void gameRestart(){
+    	inGame = true;
+		timer.stop();
+		loadImages();
+		initGame();
     }
 
+//    private void checkApple() {
+//
+//        if ((x[0] == apple_x) && (y[0] == apple_y)) {
+//            dots++;
+//            locateApple();
+//        }
+//        
+//        gameScore = dots - 3;
+//    }
+    
     private void checkApple() {
 
-        if ((x[0] == apple_x) && (y[0] == apple_y)) {
-
-            dots++;
-            locateApple();
+        for(int i = 0; i < dots; i++){
+        	if ((x[i] == apple_x) && (y[i] == apple_y)) {
+                dots++;
+                locateApple();
+            }
         }
         
         gameScore = dots - 3;
     }
-
+/*
     private void move() {
 
         for (int z = dots; z > 0; z--) {
             x[z] = x[(z - 1)];
             y[z] = y[(z - 1)];
-//            y[z] = y[(z - 1)]-;
         }
 
         if (leftDirection) {
             x[0] -= DOT_SIZE;
-//            x[0] -= 2*DOT_SIZE;
         }
 
         if (rightDirection) {
@@ -178,7 +234,45 @@ public class Board extends JPanel implements ActionListener {
         if (downDirection) {
             y[0] += DOT_SIZE;
         }
+        
     }
+    */
+    //Adding moveAccelerate
+    private void moveAccelerate(){
+    	for (int z = dots; z > 0; z--) {
+            x[z] = x[(z - 1)];
+            y[z] = y[(z - 1)];
+        }
+
+        if (leftDirection && keyLeftCount > 0) {
+            x[0] -= keyLeftCount*DOT_SIZE;
+        }
+
+        if (rightDirection && keyRightCount > 0) {
+            x[0] += keyRightCount*DOT_SIZE;
+        }
+
+        if (upDirection && keyUpCount > 0) {
+            y[0] -= keyUpCount*DOT_SIZE;
+        }
+
+        if (downDirection && keyDownCount > 0) {
+            y[0] += keyDownCount*DOT_SIZE;
+        }
+        
+        resetKeyCount();
+    }
+    
+    //Adding restart
+//    private void gameRestart(){
+//    	@Override 
+//        public void keyPressed(KeyEvent e)
+//        {
+//            if(e.getKeyChar() == 'r'){
+//            	inGame = true;
+//            }
+//        }
+//    }
 
     private void checkCollision() {
 
@@ -226,10 +320,18 @@ public class Board extends JPanel implements ActionListener {
 
             checkApple();
             checkCollision();
-            move();
+//            move();
+            moveAccelerate();
         }
 
         repaint();
+    }
+    
+    private void resetKeyCount(){
+    	keyLeftCount = 1;
+    	keyRightCount = 1;
+    	keyUpCount = 1;
+    	keyDownCount = 1;
     }
 
     private class TAdapter extends KeyAdapter {
@@ -238,30 +340,37 @@ public class Board extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
 
             int key = e.getKeyCode();
+            
 
             if ((key == KeyEvent.VK_LEFT) && (!rightDirection)) {
                 leftDirection = true;
                 upDirection = false;
                 downDirection = false;
+                keyLeftCount++;
             }
 
             if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
                 rightDirection = true;
                 upDirection = false;
                 downDirection = false;
+                keyRightCount++;
             }
 
             if ((key == KeyEvent.VK_UP) && (!downDirection)) {
                 upDirection = true;
                 rightDirection = false;
                 leftDirection = false;
+                keyUpCount++;
             }
 
             if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
                 downDirection = true;
                 rightDirection = false;
                 leftDirection = false;
+                keyDownCount++;
             }
+           
         }
+        
     }
 }
