@@ -31,6 +31,7 @@ public class Board extends JPanel implements ActionListener {
     private int dots;
     private int apple_x;
     private int apple_y;
+    private int gameScore;
 
     private boolean leftDirection = false;
     private boolean rightDirection = true;
@@ -56,13 +57,13 @@ public class Board extends JPanel implements ActionListener {
 
     private void loadImages() {
 
-        ImageIcon iid = new ImageIcon("Snakey.png");
+        ImageIcon iid = new ImageIcon("Heady.png");
         ball = iid.getImage();
 
         ImageIcon iia = new ImageIcon("Wally.png");
         apple = iia.getImage();
 
-        ImageIcon iih = new ImageIcon("Heady.png");
+        ImageIcon iih = new ImageIcon("Snakey.png");
         head = iih.getImage();
     }
 
@@ -103,6 +104,10 @@ public class Board extends JPanel implements ActionListener {
             }
 
             Toolkit.getDefaultToolkit().sync();
+            
+          //Adding display of gameScore while inGame
+            displayInGameScore(g);
+            
 
         } else {
 
@@ -110,15 +115,32 @@ public class Board extends JPanel implements ActionListener {
         }        
     }
 
+    private void displayInGameScore(Graphics g){
+    	String inGameScore = String.valueOf(gameScore);
+        Font big = new Font("Helvetica", Font.BOLD, 20);
+
+        g.setColor(Color.white);
+        g.setFont(big);
+        g.drawString(inGameScore, 280, 20);
+    }
+    
     private void gameOver(Graphics g) {
         
         String msg = "Game Over";
         Font small = new Font("Helvetica", Font.BOLD, 14);
+        Font big = new Font("Helvetica", Font.BOLD, 20);
         FontMetrics metr = getFontMetrics(small);
+
+        g.setColor(Color.red);
+        g.setFont(big);
+        g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+        
+        //Adding display gameScore upon gameOver
+        String msgScore = "Your score is: " + String.valueOf(gameScore);
 
         g.setColor(Color.white);
         g.setFont(small);
-        g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+        g.drawString(msgScore, (B_WIDTH - metr.stringWidth(msgScore)) / 2, B_HEIGHT / 2+30);
     }
 
     private void checkApple() {
@@ -128,6 +150,8 @@ public class Board extends JPanel implements ActionListener {
             dots++;
             locateApple();
         }
+        
+        gameScore = dots - 3;
     }
 
     private void move() {
@@ -135,10 +159,12 @@ public class Board extends JPanel implements ActionListener {
         for (int z = dots; z > 0; z--) {
             x[z] = x[(z - 1)];
             y[z] = y[(z - 1)];
+//            y[z] = y[(z - 1)]-;
         }
 
         if (leftDirection) {
             x[0] -= DOT_SIZE;
+//            x[0] -= 2*DOT_SIZE;
         }
 
         if (rightDirection) {
