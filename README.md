@@ -1,5 +1,7 @@
 # Project SNAKE :snake:
 
+By: Bolingot, Harry and Javier, Adee
+
 **Project SNAKE is a desktop application for an electronic version of the regular *SNAKE* game. This application will follow all the rules of the *SNAKE* game that was popularly known as a built-in game in the famous monochrome phone, Nokia 3310.**
 
 **The *SNAKE* is an electronic or video game originated in an arcade classic called the *Blockade*, a black and white maze game developed and published by Gremlin in October 1976.  The simple game is designed to use four (4) directional buttons, wherein the player moves the snake character in a straight line turning at 90 degree angle.  The objective of the game is too last long through avoiding barriers or even its own body.**
