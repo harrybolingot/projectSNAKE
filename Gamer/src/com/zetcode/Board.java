@@ -25,7 +25,9 @@ public class Board extends JPanel implements ActionListener {
 //    private final int DOT_SIZE = 10;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 29;
-    private final int DELAY = 140;
+//    private final int DELAY = 140;
+    
+    private int DELAY = 140;
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -49,6 +51,15 @@ public class Board extends JPanel implements ActionListener {
     
     //Adding random number for faking
     private int fakeFactor;
+    
+    //Adding counter
+    private int counter;
+    
+    //Adding help status
+    private boolean showingHelp = false;
+    
+    //Success indicator
+    public boolean success = false;
     
     private int DOT_SIZE = 10;
 
@@ -136,11 +147,40 @@ public class Board extends JPanel implements ActionListener {
         super.paintComponent(g);
 
         doDrawing(g);
+        
+        //showHelp
+        addKeyListener(new KeyListener(){
+        	
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyChar() == 'r'){
+					//gameRestart();
+				}
+				
+				if(e.getKeyChar() == 'h'){
+					showHelp(g);
+				}
+			}
+	
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+    	
+		});
     }
     
     private void doDrawing(Graphics g) {
         
-        if (inGame) {
+        if (inGame && !(showingHelp)) {
 
             g.drawImage(apple, apple_x, apple_y, this);
             
@@ -162,52 +202,32 @@ public class Board extends JPanel implements ActionListener {
             
             //Adding display of gameScore while inGame
             displayInGameScore(g);
-            
-            
-            
-
-        } else {
-
-            gameOver(g);
+        } 
+        
+        else if(inGame && showingHelp) {
+            	showHelp(g);
+            	showingHelp = false;
+        } 
+        
+        if(!(inGame) && !(showingHelp)){
+        	gameOver(g);
         }
         
-      //Adding showHelp
-        addKeyListener(new KeyListener(){
-        	
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-	
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if(e.getKeyChar() == 'h'){
-					//inGame = false;
-					showHelp(g);
-				}
-			}
-	
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-    	
-		});
     }
 
-    private void displayInGameScore(Graphics g){
+    void displayInGameScore(Graphics g){
     	String inGameScore = String.valueOf(gameScore);
         Font big = new Font("Helvetica", Font.BOLD, 20);
 
         g.setColor(Color.white);
         g.setFont(big);
         g.drawString(inGameScore, 280, 20);
+        
+        //Function tester
+        success = true;
     }
     
-    private void gameOver(Graphics g) {
+    void gameOver(Graphics g) {
         
         String msg = "Game Over";
         Font small = new Font("Helvetica", Font.BOLD, 14);
@@ -225,37 +245,18 @@ public class Board extends JPanel implements ActionListener {
         g.setFont(small);
         g.drawString(msgScore, (B_WIDTH - metr.stringWidth(msgScore)) / 2, B_HEIGHT / 2+30);
         
+        if(showingHelp){
+        	showHelp(g);
+        }
         
-      //Adding showHelp
-        addKeyListener(new KeyListener(){
-        	
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-	
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if(e.getKeyChar() == 'h'){
-					//inGame = false;
-					showHelp(g);
-				}
-			}
-	
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-    	
-		});
+        //Function tester
+        success = true;
+        
     }
     
     //Adding showHelp
-    private void showHelp(Graphics g) {
-        
+    void showHelp(Graphics g) {
+    	
         String msg = "Instructions:";
         Font small = new Font("Helvetica", Font.BOLD, 14);
         Font big = new Font("Helvetica", Font.BOLD, 20);
@@ -266,27 +267,38 @@ public class Board extends JPanel implements ActionListener {
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
         
         //Adding display gameScore upon gameOver
-        String msgInstructions = "Move snake using arrow keys.\n Beware of poisoned apples!";
+        String msgInstructions = "Move snake using arrow keys.";
+        String msgHelp = "Beware of poisoned apples!";
 
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msgInstructions, (B_WIDTH - metr.stringWidth(msgInstructions)) / 2, B_HEIGHT / 2+30);
         
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(msgHelp, (B_WIDTH - metr.stringWidth(msgInstructions)) / 2, B_HEIGHT / 2+50);
+     
+        //Function tester
+        success = true;
     }
     
     //gameRestart
-    private void gameRestart(){
+    void gameRestart(){
     	inGame = true;
 		timer.stop();
 		loadImages();
 		initGame();
+		
+        //Function tester
+        success = true;
     }
 
     
     private void checkApple() {
 
         for(int i = 0; i < dots; i++){
-        	if ((x[i] == apple_x) && (y[i] == apple_y)) {
+//        	if ((x[i] == apple_x) && (y[i] == apple_y)) {
+        	if (((x[0] == apple_x) && (y[0] == apple_y)) || ((x[1] == apple_x) && (y[1] == apple_y)) || ((x[2] == apple_x) && (y[2] == apple_y))) {
                 dots++;
                 fakeFactor = (int) (Math.random()*(10-1));
                 locateApple();
@@ -304,29 +316,37 @@ public class Board extends JPanel implements ActionListener {
     }
 
     //Adding moveAccelerate
-    private void moveAccelerate(){
+    void moveAccelerate(){
+    	
     	for (int z = dots; z > 0; z--) {
             x[z] = x[(z - 1)];
             y[z] = y[(z - 1)];
         }
 
         if (leftDirection && keyLeftCount > 0) {
-            x[0] -= keyLeftCount*DOT_SIZE;
+        	timer.setDelay(DELAY/(2*keyLeftCount));
+            x[0] -= DOT_SIZE;
         }
 
-        if (rightDirection && keyRightCount > 0) {
-            x[0] += keyRightCount*DOT_SIZE;
+        if (rightDirection && keyLeftCount > 0) {
+        	timer.setDelay(DELAY/(2*keyRightCount));
+        	x[0] += DOT_SIZE;
         }
 
-        if (upDirection && keyUpCount > 0) {
-            y[0] -= keyUpCount*DOT_SIZE;
+        if (upDirection && keyLeftCount > 0) {
+        	timer.setDelay(DELAY/(2*keyUpCount));
+        	y[0] -= DOT_SIZE;
         }
 
-        if (downDirection && keyDownCount > 0) {
-            y[0] += keyDownCount*DOT_SIZE;
+        if (downDirection && keyLeftCount > 0) {
+        	timer.setDelay(DELAY/(2*keyDownCount));
+        	y[0] += DOT_SIZE;
         }
         
         resetKeyCount();
+        
+        //Function tester
+        success = true;
     }
 
     private void checkCollision() {
@@ -368,13 +388,16 @@ public class Board extends JPanel implements ActionListener {
         apple_y = ((r * DOT_SIZE));
     }
     
-    private void locateFakeApple() {
+    void locateFakeApple() {
 
         int r = (int) (Math.random() * RAND_POS);
         fakeApple_x = ((r * DOT_SIZE));
 
         r = (int) (Math.random() * RAND_POS);
         fakeApple_y = ((r * DOT_SIZE));
+        
+        //Function tester
+        success = true;
     }
 
     @Override
@@ -384,18 +407,20 @@ public class Board extends JPanel implements ActionListener {
 
             checkApple();
             checkCollision();
-//            move();
             moveAccelerate();
         }
 
         repaint();
     }
     
-    private void resetKeyCount(){
+    void resetKeyCount(){
     	keyLeftCount = 1;
     	keyRightCount = 1;
     	keyUpCount = 1;
     	keyDownCount = 1;
+    	
+        //Function tester
+        success = true;
     }
 
     private class TAdapter extends KeyAdapter {
@@ -432,6 +457,11 @@ public class Board extends JPanel implements ActionListener {
                 rightDirection = false;
                 leftDirection = false;
                 keyDownCount++;
+            }
+            
+            if (key == KeyEvent.VK_H) {
+                //will show help?
+            	showingHelp = true;
             }
            
         }
