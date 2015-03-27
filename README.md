@@ -26,7 +26,7 @@
   * Establish a displayInGameScore for players to keep track of their score and to easily know the game winner
   *	Designate a moveAccelerate function for the snake’s move or animation
   *	Develop a locateFakeApple function as one of the game’s twist or challenge
-  *	Design a ChangeColor for players can have a choice for their snake’s skin color preference
+  *	Include a gameRestart for players can reset the game if they wish to
   *	Write a simple guide on how to play a game through showHelp function
 
 
