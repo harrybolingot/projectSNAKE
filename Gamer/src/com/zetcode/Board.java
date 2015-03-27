@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -33,6 +34,10 @@ public class Board extends JPanel implements ActionListener {
     private int apple_x;
     private int apple_y;
     
+    //Adding Fake Apple
+    private int fakeApple_x;
+    private int fakeApple_y;
+    
     //Adding gameScore
     private int gameScore;
     
@@ -41,6 +46,10 @@ public class Board extends JPanel implements ActionListener {
     private int keyLeftCount;
     private int keyUpCount;
     private int keyDownCount;
+    
+    //Adding random number for faking
+    Random rand = new Random();
+    private int fakeFactor;
     
     private int DOT_SIZE = 10;
 
@@ -112,6 +121,9 @@ public class Board extends JPanel implements ActionListener {
         }
 
         locateApple();
+        
+        //Adding fake Apple
+        locateFakeApple();
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -129,6 +141,12 @@ public class Board extends JPanel implements ActionListener {
         if (inGame) {
 
             g.drawImage(apple, apple_x, apple_y, this);
+            
+            if((dots*fakeFactor) % 3 == 0){
+            	g.drawImage(apple, apple_x, apple_y, this);
+            	g.drawImage(apple, fakeApple_x, fakeApple_y, this);
+            }
+            
 
             for (int z = 0; z < dots; z++) {
                 if (z == 0) {
@@ -190,22 +208,21 @@ public class Board extends JPanel implements ActionListener {
 		initGame();
     }
 
-//    private void checkApple() {
-//
-//        if ((x[0] == apple_x) && (y[0] == apple_y)) {
-//            dots++;
-//            locateApple();
-//        }
-//        
-//        gameScore = dots - 3;
-//    }
     
     private void checkApple() {
 
         for(int i = 0; i < dots; i++){
         	if ((x[i] == apple_x) && (y[i] == apple_y)) {
                 dots++;
+                fakeFactor = (int) (Math.random()*(10-1));
                 locateApple();
+                locateFakeApple();
+            }
+        	
+        	if ((x[i] == fakeApple_x) && (y[i] == fakeApple_y)) {
+        		inGame = false;
+        		locateApple();
+        		locateFakeApple();
             }
         }
         
@@ -311,6 +328,15 @@ public class Board extends JPanel implements ActionListener {
 
         r = (int) (Math.random() * RAND_POS);
         apple_y = ((r * DOT_SIZE));
+    }
+    
+    private void locateFakeApple() {
+
+        int r = (int) (Math.random() * RAND_POS);
+        fakeApple_x = ((r * DOT_SIZE));
+
+        r = (int) (Math.random() * RAND_POS);
+        fakeApple_y = ((r * DOT_SIZE));
     }
 
     @Override
