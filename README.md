@@ -1,4 +1,4 @@
-# Project SNAKE :snake:
+# Project mYSNAKEY :snake:
 
 By: Bolingot, Harry and Javier, Adee
 
